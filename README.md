@@ -1,0 +1,2 @@
+# rubix
+Rubix Cube Solver
