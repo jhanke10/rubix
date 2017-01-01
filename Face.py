@@ -56,17 +56,41 @@ class Face:
 
 	#Get Corner Pieces
 	def getCorner():
-		corner = []
-		
+		corner = [side[0][0], side[0][2], side[2][2], side[2][0]]
+		return corner
+
+	#Set Corner Pieces
+	def setCorner(corners):
+		side[0][0] = corners[0]
+		side[0][2] = corners[1]
+		side[2][2] = corners[2]
+		side[2][0] = corners[3]
+
+	#Get Cross Edge Pieces
+	def getCross():
+		cross = [side[0][1], side[1][2], side[2][1], side[1][0]]
+		return cross
+
+	#Set Cross Pieces
+	def setCross(crosses):
+		side[0][1] = crosses[0]
+		side[1][2] = crosses[1]
+		side[2][1] = crosses[2]
+		side[1][0] = crosses[3]
 
 	#Rotate Clockwise
 	def rotateCW():
-		
-		
+		corner = getCorner()
+		cross = getCross()
+		setCorner(corner.rotate(1))
+		setCross(cross.rotate(1))
 
 	#Rotate Counter Clockwise
 	def rotateCCW():
-
+		corner = getCorner()
+		cross = getCross()
+		setCorner(corner.rotate(3))
+		setCross(cross.rotate(3))
 
 	#Check if face is certain color (for solved state)
 	def checkColors(self, color):
