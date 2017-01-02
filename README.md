@@ -2,4 +2,4 @@
 Rubix Cube Solver
 
 ##Solving
--Uses A* Search
+  --Uses A* Search
