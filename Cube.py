@@ -7,6 +7,7 @@ back = 3
 top = 4
 bottom = 5
 
+#Color of all of the sides of the rubix cube
 sides = ['r', 'g', 'b', 'o', 'w', 'y']
 
 #Rubix cube
@@ -68,4 +69,20 @@ class Cube:
 			output += '\n'
 		return output
 
-print Cube()
+	#Checks if the cube have been solved by checking each sides correct color
+	def haveSolved(self):
+		for i in range(len(self.faces)):
+			if not self.faces[i].checkColors(sides[i]):
+				return False
+		return True
+
+	#Moves 
+	def moveHelper(self, move):
+
+
+
+
+
+
+
+
