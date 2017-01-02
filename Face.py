@@ -1,27 +1,28 @@
 #A side of the cube
 class Face:
+	global side
 	side = []
-	row = []
 
 	#Initialize for single color
 	def __init__(self, color):
-		for i in range(3):
-			row.append(color)
-		side.append(row)
 		row = []
+		for i in range(3):
+			for j in range(3):
+				row.append(color)
+			side.append(row)
+			row = []
 
-	#Print out string for face, which can add characters
-	def __str__(self, char = ''):
+	#Print out string for face
+	def __str__(self):
 		output = ''
 		for i in range(len(side)):
-			output += char
 			for j in range(len(side)):
-				output += side[i][j]
+				output += side[i][j] + ' '
 			output += '\n'
 		return output
 
 	#Get face
-	def getColors():
+	def getColors(self):
 		return side
 
 	#Set face with array of colors
@@ -31,7 +32,7 @@ class Face:
 				side[i][j] = colors[i][j]
 
 	#Get size of side
-	def getNum():
+	def getNum(self):
 		return len(side)
 
 	#Get Row
@@ -55,7 +56,7 @@ class Face:
 			side[i][col] = color[i]
 
 	#Get Corner Pieces
-	def getCorner():
+	def getCorner(self):
 		corner = [side[0][0], side[0][2], side[2][2], side[2][0]]
 		return corner
 
@@ -67,7 +68,7 @@ class Face:
 		side[2][0] = corners[3]
 
 	#Get Cross Edge Pieces
-	def getCross():
+	def getCross(self):
 		cross = [side[0][1], side[1][2], side[2][1], side[1][0]]
 		return cross
 
@@ -79,14 +80,14 @@ class Face:
 		side[1][0] = crosses[3]
 
 	#Rotate Clockwise
-	def rotateCW():
+	def rotateCW(self):
 		corner = getCorner()
 		cross = getCross()
 		setCorner(corner.rotate(1))
 		setCross(cross.rotate(1))
 
 	#Rotate Counter Clockwise
-	def rotateCCW():
+	def rotateCCW(self):
 		corner = getCorner()
 		cross = getCross()
 		setCorner(corner.rotate(3))
