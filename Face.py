@@ -1,3 +1,7 @@
+#Row/Col
+row = 0
+col = 1
+
 #A side of the cube
 class Face:
 	side = []
@@ -27,29 +31,24 @@ class Face:
 			for j in range(len(colors)):
 				self.side[i][j] = colors[i][j]
 
-	#Get size of side
-	def getNum(self):
-		return len(self.side)
+	#Determines if function is a getter of row or col
+	def getFunc(self, part, num):
+		if part == row:
+			return self.side[num]
+		else:
+			column = []
+			for i in range(len(self.side)):
+				column.append(self.side[i][num])
+			return column
 
-	#Get Row
-	def getRow(self, row):
-		return self.side[row]
+	#Determines if function is a setter of row or col
+	def setFunc(self, part, num, color):
+		if part == row:
+			self.side[num] = color[:]
+		else:
+			for i in range(len(self.side)):
+				self.side[i][num] = color[i]
 
-	#Set Row
-	def setRow(self, row, color):
-		self.side[row] = color[:]
-
-	#Get Column
-	def getCol(self, col):
-		column = []
-		for i in range(len(self.side)):
-			column.append(self.side[i][col])
-		return column
-
-	#Set Column
-	def setCol(self, col, color):
-		for i in range(len(self.side)):
-			self.side[i][col] = color[i]
 
 	#Get Corner Pieces
 	def getCorner(self):
@@ -75,19 +74,22 @@ class Face:
 		self.side[2][1] = crosses[2]
 		self.side[1][0] = crosses[3]
 
-	#Rotate Clockwise
-	def rotateCW():
-		corner = getCorner()
-		cross = getCross()
-		setCorner(corner.rotate(1))
-		setCross(cross.rotate(1))
+	#Rotate list
+	def rotate(self, lists, num):
+		return lists[num:] + lists[:num]
 
-	#Rotate Counter Clockwise
-	def rotateCCW():
-		corner = getCorner()
-		cross = getCross()
-		setCorner(corner.rotate(3))
-		setCross(cross.rotate(3))
+	#Rotate Clockwise or Counter Clockwise
+	def rotateFace(self, cw):
+		if cw:
+			corner = self.getCorner()
+			cross = self.getCross()
+			self.setCorner(self.rotate(corner, 1))
+			self.setCross(self.rotate(cross, 1))
+		else:
+			corner = self.getCorner()
+			cross = self.getCross()
+			self.setCorner(self.rotate(corner, 3))
+			self.setCross(self.rotate(cross, 3))
 
 	#Check if face is certain color (for solved state)
 	def checkColors(self, color):
