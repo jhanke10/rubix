@@ -1,0 +1,30 @@
+      w w w 
+      w w w 
+      w w w 
+g g g r r r b b b o o o 
+g g g r r r b b b o o o 
+g g g r r r b b b o o o 
+      y y y 
+      y y y 
+      y y y 
+
+      o w w 
+      o w w 
+      o w w 
+g g g w r r b b b o o y 
+g g g w r r b b b o o y 
+g g g w r r b b b o o y 
+      r y y 
+      r y y 
+      r y y 
+
+      o w w 
+      o w w 
+      g g g 
+g g r w w w o b b o o y 
+g g y r r r w b b o o y 
+g g y r r r w b b o o y 
+      b b b 
+      r y y 
+      r y y 
+

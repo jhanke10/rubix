@@ -27,8 +27,8 @@ class Face:
 
 	#Set face with array of colors
 	def setColors(self, colors):
-		for i in range(len(colors)):
-			for j in range(len(colors)):
+		for i in range(len(self.side)):
+			for j in range(len(self.side)):
 				self.side[i][j] = colors[i][j]
 
 	#Determines if function is a getter of row or col
@@ -83,13 +83,13 @@ class Face:
 		if cw:
 			corner = self.getCorner()
 			cross = self.getCross()
-			self.setCorner(self.rotate(corner, 1))
-			self.setCross(self.rotate(cross, 1))
+			self.setCorner(self.rotate(corner, 3))
+			self.setCross(self.rotate(cross, 3))
 		else:
 			corner = self.getCorner()
 			cross = self.getCross()
-			self.setCorner(self.rotate(corner, 3))
-			self.setCross(self.rotate(cross, 3))
+			self.setCorner(self.rotate(corner, 1))
+			self.setCross(self.rotate(cross, 1))
 
 	#Check if face is certain color (for solved state)
 	def checkColors(self, color):

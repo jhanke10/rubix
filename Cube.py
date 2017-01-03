@@ -1,11 +1,11 @@
-from Face import *
+from face import *
 
 #Sides of the cube
-front = 0
+top = 0
 left = 1
-right = 2
-back = 3
-top = 4
+front = 2
+right = 3
+back = 4
 bottom = 5
 
 #Row/Col
@@ -13,7 +13,7 @@ row = 0
 col = 1
 
 #Color of all of the sides of the rubix cube
-colors = ['r', 'g', 'b', 'o', 'w', 'y']
+colors = ['w', 'g', 'r', 'b', 'o', 'y']
 
 #Rubix cube
 class Cube:
@@ -30,19 +30,65 @@ class Cube:
 		bottom : [[left, row, 2], [back, row, 2], [right, row, 2], [front, row, 2]]
 	}
 
-	#Initialize a solved cube
-	def __init__(self):
+	#Initialize a solved cube if no file-read, else make the layout in file
+	def __init__(self, files = None):
 		for i in range(6):
 			self.faces.append(Face(colors[i]))
+		if files != None:
+			layout = open(files, 'r')
+			count = 0
+			layout_faces = []
+
+			#Parsing the input file layout
+			face = []
+			for tiles in layout:
+				tiles = tiles.split()
+				if count < 3: 
+					face.append(tiles)
+				if count == 3:
+					layout_faces.append(face)
+					face = []
+				if count > 2 and count < 6:
+					face.append(tiles)
+				if count == 5:
+					face = self.getFaces(face)
+					for i in range(len(face)):
+						layout_faces.append(face[i])
+					face = []
+				if count > 5 and count < 9:
+					face.append(tiles)
+				if count == 8:
+					layout_faces.append(face)
+				count += 1
+
+			#Set the cube's faces to the layout color
+			for i in range(len(layout_faces)):
+				self.faces[i].setColors(layout_faces[i])
+
+	#Breaks up the list into faces
+	def getFaces(self, lists):
+		layout_faces = []
+		lists_face = []
+		for i in range(len(lists)):
+			layout = lists[i]
+			face = [layout[x:x+3] for x in xrange(0, len(layout), 3)]
+			lists_face.append(face)
+		face = []
+		for i in range(4):
+			for j in range(3):
+				face.append(lists_face[j][i])
+			layout_faces.append(face)
+			face = []
+		return layout_faces
 
 	#Returns a string for the cube
 	#Output Format:      
 	#      w w w
 	#      w w w
 	#      w w w
-	#g g g r r r b b b o o o
-	#g g g r r r b b b o o o
-	#g g g r r r b b b o o o
+	# g g g r r r b b b o o o
+	# g g g r r r b b b o o o
+	# g g g r r r b b b o o o
 	#      y y y
 	#      y y y
 	#      y y y
@@ -57,10 +103,9 @@ class Cube:
 			output += '\n'
 
 		#Adds the middle four faces
-		mid = [left, front, right, back]
 		for i in range(len(face)):
 			for k in range(4):
-				face = self.faces[mid[k]].side
+				face = self.faces[k+1].side
 				for j in range(len(face)):
 					output += face[i][j] + ' '
 			output += '\n'
