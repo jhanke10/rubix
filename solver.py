@@ -46,7 +46,7 @@ def getStates(cube):
 #Heuristic Algorithm 
 def heuristic(cube):
 	#Calculate the displacement of cubes from each of the different solved states (four of each rotation)
-	solved = Cube()
+	solved = Cube(True)
 
 	#Minimum cube displacement
 	min_disp = None
@@ -58,7 +58,7 @@ def heuristic(cube):
 				min_disp = disp
 		solved.flipCube(vertical)
 
-	return min_disp
+	return min_disp / 4.0
 
 #Solver Algorithm using A* Search
 def rubixSolver(cube):
@@ -96,7 +96,7 @@ def rubixSolver(cube):
 		#See if the cube is at goal state
 		if heuristic(cube) == 0:
 			print "Solved"
-			return reconstruct(parent, curr)
+			return reconstruct(cube, parent, curr)
 
 		#Add the state to seen
 		closedSet.add(curr)
@@ -113,11 +113,11 @@ def rubixSolver(cube):
 			curr_state = cube.state()
 
 			#Checks if the state has been seen
-			if cube.state() in closedSet:
+			if curr_state in closedSet:
 				continue
 
 			#Checks to see if any orientation of the state have been seen
-			states = getStates()
+			states = getStates(cube)
 			seen = False
 			for orientation in states:
 				if orientation in closedSet or orientation in gscore:
@@ -136,26 +136,66 @@ def rubixSolver(cube):
 			if curr_state not in closedSet or (curr_state in gscore and score < gscore[curr_state]):
 				gscore[curr_state] = score
 				fscore[curr_state] = score + heuristic(cube)
-				openSet.put(curr_state, fscore[curr_state])
-				parent[curr_state] = (curr, move)	
+				openSet.put(curr_state, fscore[curr_state])	
+				parent[curr_state] = (curr, move)
+
+#Makes the moves in a readable format
+def move_convertor(moves):
+	converted = []
+	state = ["T", "L", "F", "R", "Ba", "Bo"]
+	for move in moves:
+		if move != None:
+			rotate = state[move[0]]
+			if not move[1]:
+				rotate = rotate + "'"
+			converted.append(rotate)
+	return converted, " ".join(converted)
 
 #Reconstructs the path to the solved state
-def reconstruct(orig, curr):
+def reconstruct(cube, orig, curr):
 	moves = []
+	states = []
 
 	#Gets the move used to get from curr to original state
 	while curr is not None:
-		moves.append(orig[curr][1])
-		if orig[curr][0] is not None:
-			curr = orig[curr][0]
-		else:
+		next, move = orig[curr][0], orig[curr][1]
+		if move is not None:
+			moves.append(move)
+		if next is not None:
+			states.append(curr)
+			curr = next
+		else: 
 			break
+	moves.reverse()
+	states.reverse()
+
+	#Convert move to rotation syntax
+	move_list, moves = move_convertor(moves)
+
+	#Print out each individual step, showing cube configuration after each move
+	if move_list != []:
+		print "\nSolution: "
+		for i in range(len(move_list)):
+				cube.setState(states[i])
+				print 'Layout After ' + str(move_list[i]) + ':'
+				print cube
 
 	#Returns the move in reverse from orig to end state
-	return moves.reverse()
+	return moves
 
 def main():
-	cube = Cube("layout.txt")
+	# cube = Cube('layout.txt')
+	cube = Cube(False)
+	if cube.scrambled != []:
+		print "Scramble Steps: "
+		_, scramble = move_convertor(cube.scrambled)
+		print scramble
+		print ''
+	print 'Starting Layout:'
+   	print cube
+   	start = time.time()
 	print rubixSolver(cube)
+	end = time.time()
+	print 'Time Elapsed: ' + str(end - start) + 's'
 
 if __name__ == "__main__":main()

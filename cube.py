@@ -1,4 +1,5 @@
 from face import *
+from random import *
 
 #Sides of the cube
 top = 0
@@ -16,6 +17,8 @@ horizontal = 1
 class Cube:
 	#Faces of the cube
 	faces = []
+
+	scrambled = []
 
 	#Color of all of the sides of the rubix cube
 	colors = ['w', 'g', 'r', 'b', 'o', 'y']
@@ -36,8 +39,9 @@ class Cube:
 	}
 
 	#Initialize a solved cube if no file-read, else make the layout in file
-	def __init__(self, files = None):
+	def __init__(self, solved, files = None):
 		self.faces = []
+		self.scrambled = []
 		for i in range(6):
 			self.faces.append(Face(self.colors[i]))
 		if files != None:
@@ -70,6 +74,9 @@ class Cube:
 			#Set the cube's faces to the layout color
 			for i in range(len(layout_faces)):
 				self.faces[i].setColors(layout_faces[i])
+
+		elif solved == False:
+			self.scrambled = self.scramble()
 
 	#Breaks up the list into faces
 	def getFaces(self, lists):
@@ -166,7 +173,7 @@ class Cube:
 
 	#Takes a move and changes the configuration of the cube
 	def moveHelper(self, move, cw = True):
-		sides = self.moves[move]
+		sides = self.moves[move][:]
 
 		#Alter order if CCW
 		if not cw:
@@ -190,3 +197,13 @@ class Cube:
 
 		#Rotate face
 		self.faces[move].rotateFace(cw)
+
+	#Scrambles Cube
+	def scramble(self):
+		moves = []
+		for i in range(10):
+			move = randint(0, 5)
+			rotation = randint(0, 1)
+			moves.append((move, rotation))
+			self.moveHelper(move, rotation)
+		return moves
