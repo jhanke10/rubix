@@ -8,10 +8,6 @@ right = 3
 back = 4
 bottom = 5
 
-#Row/Col
-row = 0
-col = 1
-
 #Vertically/Horizontally
 vertical = 0
 horizontal = 1
@@ -41,6 +37,7 @@ class Cube:
 
 	#Initialize a solved cube if no file-read, else make the layout in file
 	def __init__(self, files = None):
+		self.faces = []
 		for i in range(6):
 			self.faces.append(Face(self.colors[i]))
 		if files != None:
@@ -139,17 +136,29 @@ class Cube:
 		for i in range(len(self.faces)):
 			self.colors[i] = self.faces[i].getCenter()
 
-
-	#Checks if the cube have been solved by checking each sides correct color
-	def haveSolved(self):
+	#Creates a string for the cube state
+	def state(self):
+		curr = ''
 		for i in range(len(self.faces)):
-			if not self.faces[i].checkColors(self.colors[i]):
-				return False
-		return True
+			curr += self.faces[i].state()
+		return curr
 
-	#Creates the solved cube to check if have solved
-	def solveCube(self):
-		return Cube().faces
+	#Sets the state of the cube from string
+	def setState(self, state):
+		states = state.strip()
+		state_faces = []
+		count = 0
+		for i in range(6):
+			face = []
+			for x in range(3):
+				row = []
+				for y in range(3):
+					row.append(states[count])
+					count += 1
+				face.append(row)
+			state_faces.append(face)
+		for i in range(len(self.faces)):
+			self.faces[i].setColors(state_faces[i])
 
 	#Get Move
 	def getMove(self, move):

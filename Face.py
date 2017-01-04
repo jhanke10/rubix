@@ -57,6 +57,23 @@ class Face:
 		cross = [self.side[0][1], self.side[1][2], self.side[2][1], self.side[1][0]]
 		return corner, cross
 
+	#Calculate different cubes
+	def calcDiff(self, faces):
+		diff = 0
+		for i in range(len(self.side)):
+			for j in range(len(self.side)):
+				if self.side[i][j] != faces.side[i][j]:
+					diff += 1
+		return diff
+
+	#Creates a string for the face state
+	def state(self):
+		curr = ''
+		for i in range(len(self.side)):
+			for j in range(len(self.side)):
+				curr += self.side[i][j]
+		return curr
+
 	#Set Edge Pieces
 	def setEdge(self, corners, crosses):
 		#Set Corners
