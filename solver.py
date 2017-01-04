@@ -143,6 +143,7 @@ def rubixSolver(cube):
 def reconstruct(orig, curr):
 	moves = []
 
+	#Gets the move used to get from curr to original state
 	while curr is not None:
 		moves.append(orig[curr][1])
 		if orig[curr][0] is not None:
@@ -150,6 +151,7 @@ def reconstruct(orig, curr):
 		else:
 			break
 
+	#Returns the move in reverse from orig to end state
 	return moves.reverse()
 
 def main():
