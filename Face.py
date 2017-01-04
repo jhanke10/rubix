@@ -27,9 +27,7 @@ class Face:
 
 	#Set face with array of colors
 	def setColors(self, colors):
-		for i in range(len(self.side)):
-			for j in range(len(self.side)):
-				self.side[i][j] = colors[i][j]
+		self.side = colors[:]
 
 	#Determines if function is a getter of row or col
 	def getFunc(self, part, num):
@@ -49,26 +47,25 @@ class Face:
 			for i in range(len(self.side)):
 				self.side[i][num] = color[i]
 
+	#Get Center Piece
+	def getCenter(self):
+		return self.side[1][1]
 
-	#Get Corner Pieces
-	def getCorner(self):
+	#Get Edge Pieces
+	def getEdge(self):
 		corner = [self.side[0][0], self.side[0][2], self.side[2][2], self.side[2][0]]
-		return corner
+		cross = [self.side[0][1], self.side[1][2], self.side[2][1], self.side[1][0]]
+		return corner, cross
 
-	#Set Corner Pieces
-	def setCorner(self, corners):
+	#Set Edge Pieces
+	def setEdge(self, corners, crosses):
+		#Set Corners
 		self.side[0][0] = corners[0]
 		self.side[0][2] = corners[1]
 		self.side[2][2] = corners[2]
 		self.side[2][0] = corners[3]
 
-	#Get Cross Edge Pieces
-	def getCross(self):
-		cross = [self.side[0][1], self.side[1][2], self.side[2][1], self.side[1][0]]
-		return cross
-
-	#Set Cross Pieces
-	def setCross(self, crosses):
+		#Set Cross
 		self.side[0][1] = crosses[0]
 		self.side[1][2] = crosses[1]
 		self.side[2][1] = crosses[2]
@@ -80,16 +77,11 @@ class Face:
 
 	#Rotate Clockwise or Counter Clockwise
 	def rotateFace(self, cw):
+		corner, cross = self.getEdge()
 		if cw:
-			corner = self.getCorner()
-			cross = self.getCross()
-			self.setCorner(self.rotate(corner, 3))
-			self.setCross(self.rotate(cross, 3))
+			self.setEdge(self.rotate(corner, 3), self.rotate(cross, 3))
 		else:
-			corner = self.getCorner()
-			cross = self.getCross()
-			self.setCorner(self.rotate(corner, 1))
-			self.setCross(self.rotate(cross, 1))
+			self.setEdge(self.rotate(corner, 1), self.rotate(cross, 1))
 
 	#Check if face is certain color (for solved state)
 	def checkColors(self, color):

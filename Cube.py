@@ -12,13 +12,17 @@ bottom = 5
 row = 0
 col = 1
 
-#Color of all of the sides of the rubix cube
-colors = ['w', 'g', 'r', 'b', 'o', 'y']
+#Vertically/Horizontally
+vertical = 0
+horizontal = 1
 
 #Rubix cube
 class Cube:
 	#Faces of the cube
 	faces = []
+
+	#Color of all of the sides of the rubix cube
+	colors = ['w', 'g', 'r', 'b', 'o', 'y']
 
 	#Holds the faces that are affected by the move
 	moves = {
@@ -30,10 +34,15 @@ class Cube:
 		bottom : [[left, row, 2], [back, row, 2], [right, row, 2], [front, row, 2]]
 	}
 
+	flips = {
+		vertical : [front, bottom, back, top],
+		horizontal : [front, right, back, left]
+	}
+
 	#Initialize a solved cube if no file-read, else make the layout in file
 	def __init__(self, files = None):
 		for i in range(6):
-			self.faces.append(Face(colors[i]))
+			self.faces.append(Face(self.colors[i]))
 		if files != None:
 			layout = open(files, 'r')
 			count = 0
@@ -119,12 +128,28 @@ class Cube:
 			output += '\n'
 		return output
 
+	#Flips cube in two directions: vertically towards you or horizontally right
+	def flipCube(self, direction):
+		flip = self.flips[direction]
+		next = self.faces[flip[0]].side[:]
+		for i in range(len(flip)):
+			curr = next[:]
+			next = self.faces[flip[(i + 1) % 4]].side[:]
+			self.faces[flip[(i + 1) % 4]].setColors(curr)
+		for i in range(len(self.faces)):
+			self.colors[i] = self.faces[i].getCenter()
+
+
 	#Checks if the cube have been solved by checking each sides correct color
 	def haveSolved(self):
 		for i in range(len(self.faces)):
-			if not self.faces[i].checkColors(colors[i]):
+			if not self.faces[i].checkColors(self.colors[i]):
 				return False
 		return True
+
+	#Creates the solved cube to check if have solved
+	def solveCube(self):
+		return Cube().faces
 
 	#Get Move
 	def getMove(self, move):
